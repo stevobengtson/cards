@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  cards-api:
+    container_name: cards-api
+    build:
+      context: ./cards-api
+    volumes:
+      - ./cards-api/:/app:rw,delegated
+    networks:
+      - cards_network
+
+  cards-web:
+    container_name: cards-web
+    build:
+      context: ./cards-web
+    volumes:
+      - ./cards-web/:/app:rw,delegated
+      - '/app/node_modules'
+    networks:
+      - cards_network
+
+  redis:
+    container_name: cards-redis
+    image: redis:alpine
+    networks:
+      - cards_network
+  
+
+networks:
+  cards_network:
+    name: cards_network

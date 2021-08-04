@@ -1,0 +1,30 @@
+.card-image {
+  max-width: 250px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  max-width: 250px;
+  padding: 0 4px;
+}
+
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
+}
+
+.card {
+  position: relative;
+}
+
+.card .card-action {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}

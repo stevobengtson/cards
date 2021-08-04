@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  cards-api:
+    build:
+      target: dev    
+    volumes:
+      # Update this to wherever you want VS Code to mount the folder of your project
+      - ./cards-api/:/app:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+ 
+  cards-web:
+    build:
+      target: dev
+    volumes:
+      - ./cards-web/:/app:cached

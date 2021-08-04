@@ -1,0 +1,88 @@
+@schema = http
+@hostname = localhost
+@port = 8080
+@host = {{schema}}://{{hostname}}:{{port}}
+
+###
+
+# #@name login
+# POST {{host}}/login
+# Content-Type: application/x-www-form-urlencoded
+
+# email=user@test.com&password=P@ssw0rD123
+
+###
+
+#@authToken = {{login.response.headers.X-AuthToken}}
+
+# @name CreateGame
+POST {{host}}/game
+#Authorization: {{authToken}}
+Content-Type: application/application/json
+
+{
+    "decks": 2,
+    "players": [
+        "Steven",
+        "Coral"
+    ]
+}
+
+###
+
+@gameKey = {{CreateGame.response.body.data.Key}}
+
+# @name GetGame
+GET {{host}}/game/{{gameKey}}
+
+###
+
+@gameKey = {{CreateGame.response.body.data.Key}}
+
+# @name Shuffle
+
+PUT {{host}}/game/{{gameKey}}/shuffle
+
+###
+
+@gameKey = {{CreateGame.response.body.data.Key}}
+@firstPlayerUUID = {{CreateGame.response.body.data.Players[0].UUID}}
+
+# @name Deal
+PUT {{host}}/game/{{gameKey}}/deal
+Content-Type: application/json
+
+{
+    "count": 5,
+    "player_uuid": "{{firstPlayerUUID}}"
+}
+
+###
+
+@gameKey = {{CreateGame.response.body.data.Key}}
+@firstPlayerUUID = {{CreateGame.response.body.data.Players[0].UUID}}
+
+@cardUUID1 = {{Deal.response.body.data.Players[0].Cards[0].UUID}}
+@cardUUID2 = {{Deal.response.body.data.Players[0].Cards[1].UUID}}
+
+# @name Discard
+PUT {{host}}/game/{{gameKey}}/discard
+Content-Type: application/json
+
+{
+    "cards": [
+        "{{cardUUID1}}",
+        "{{cardUUID2}}"
+    ],
+    "player_uuid": "{{firstPlayerUUID}}"
+}
+
+###
+
+@gameKey = {{CreateGame.response.body.data.Key}}
+
+# @name Return
+PUT {{host}}/game/{{gameKey}}/return
+Content-Type: application/json
+
+{}

@@ -1,0 +1,56 @@
+
+<div *ngIf="game">
+  <p>{{game?.Key}}</p>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Select Player</mat-label>
+    <mat-select [(value)]="playerUUID">
+      <mat-option *ngFor="let player of game.Players" [value]="player.UUID">{{player.Name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div>
+    <div class="row">
+      <div class="column">
+        <h3>Deck</h3>
+        <div class="card">
+          <img class="card-image" src="assets/cards/blue_back.png">
+          <button class="card-action" mat-fab color="primary" (click)="shuffle()" [disabled]="shuffling">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="column">
+        <h3>Discard Pile</h3>
+        <div *ngIf="lastDiscard" class="card">
+          <img  class="card-image" src="assets/cards/{{lastDiscard.Type}}{{lastDiscard.Suit}}.png">
+          <button class="card-action" mat-fab color="accent" (click)="shuffleDiscard()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="!lastDiscard" class="card">
+          <img class="card-image" src="assets/cards/gray_back.png">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="playerUUID != ''">
+    <button mat-raised-button color="primary" (click)="dealCard()">Deal Card</button>
+
+    <div class="row" *ngIf="player">
+      <div class="column card" *ngFor="let card of player.Cards">
+        <img class="card-image" src="assets/cards/{{card.Type}}{{card.Suit}}.png">
+        <button class="card-action" mat-fab color="warn" (click)="discard(card.UUID)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!game">
+  <p>Please wait, loading...</p>
+  <mat-spinner></mat-spinner>
+</div>
